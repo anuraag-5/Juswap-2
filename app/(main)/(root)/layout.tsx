@@ -45,7 +45,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
   const handleSwap = async () => {
     setIsLoading(true);
-    await createAndExecuteJupyterSwap(
+    const done = await createAndExecuteJupyterSwap(
       finalSwaps,
       publicKey!.toString(),
       signTransaction!,
@@ -53,7 +53,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     );
 
     setIsLoading(false);
-    setIsSuccess(true);
+    if (done) {
+      setIsSuccess(true);
+      return;
+    }
+    setIsOpen(false);
   };
 
   const handleCancel = async () => {
@@ -61,15 +65,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     setIsOpen(false);
   };
   useEffect(() => {
-    let retryDelay = 20000;
+    let retryDelay = 15000;
     const intervalId = setInterval(async () => {
       if (!publicKey) return;
       try {
         if (!initialFetchDone.current) {
           const fetchedLatestSignatures = await getLatestSignatures(publicKey);
           latestSignatures.current = fetchedLatestSignatures;
-          console.log(fetchedLatestSignatures);
-          console.log("i set signatures");
           initialFetchDone.current = true;
           return;
         }
@@ -87,7 +89,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             }
           }
           if (!found) {
-
             if (fetchedLatestSignature.mint === outputMint) {
               return;
             }
@@ -115,7 +116,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           }
         }
         latestSignatures.current = fetchedLatestSignatures;
-        retryDelay = 20000;
+        retryDelay = 15000;
       } catch (error) {
         console.error("RPC Error:", error);
         retryDelay *= 2;
@@ -186,9 +187,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 </AlertDialogCancel>
                 <AlertDialogAction
                   className="bg-brand rounded-full max-w-32 px-8"
-                  onClick={() => {
-                    handleSwap();
-                  }}
+                  onClick={handleSwap}
                 >
                   {isLoading ? (
                     <Image
@@ -205,7 +204,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               </>
             ) : (
               <AlertDialogCancel
-                className="bg-brand-secondary rounded-full max-w-32 text-[#000000] border-none"
+                className="bg-brand-secondary rounded-full max-w-32 text-[#ffffff] border-none"
                 onClick={() => setIsOpen(false)}
               >
                 Success 👋
