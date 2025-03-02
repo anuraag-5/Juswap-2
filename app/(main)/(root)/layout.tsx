@@ -87,13 +87,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             }
           }
           if (!found) {
-            /* This is a new signature */
 
-            // Confirm if transaction is not related to USDC.
             if (fetchedLatestSignature.mint === outputMint) {
               return;
             }
-            // Check if token is received or sent.
             const latestTokenTransfers = await getAndConfirmLatestTokenTransfer(
               fetchedLatestSignature.latestSignature,
               fetchedLatestSignature.mint,
@@ -101,16 +98,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             );
 
             if (!latestTokenTransfers || latestTokenTransfers.length === 0) {
-              // No tokens recieved.
               return;
             }
             if (latestTokenTransfers === null) {
               console.log("Error fetching transaction details");
               return;
             }
-
-            // Confirmed Token Received
-            // Just iterate over every valid latestTokenTransfers and call jupiter's swap api it's easy.
             for (const latestTokenTransfer of latestTokenTransfers) {
               swaps.current.push({
                 inputMint: latestTokenTransfer.tokenMint,
