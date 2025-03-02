@@ -1,6 +1,9 @@
-## Run npm install & then npm run dev
+## Juswap (Docker installation)
 
-# First open a tab and connect a wallet
-# Then open a new tab and connect another wallet
-# Then send tokens from second tab to first tab's wallet.
-# Then wait for max 10 second it should pop the swap.
+Just get an alchemy rpc api key from alchemy, and just upgrade to pay as you go plan, this won't cost you money i have been using it from 5 days to test and nothing has cost me.
+
+Just run
+**docker pull anuraaag5/juswap2**
+**docker run -p 3000:3000 -e NEXT_PUBLIC_RPC_API_KEY=<YOUR_RPC_API_KEY> -e NEXT_PUBLIC_JUPITER_API=<YOUR_JUPITER_API_KEY> anuraaag5/juswap2**
+
+
