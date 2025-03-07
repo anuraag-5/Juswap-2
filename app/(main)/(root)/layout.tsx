@@ -65,7 +65,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     setIsOpen(false);
   };
   useEffect(() => {
-    let retryDelay = 15000;
+    let retryDelay = 9000;
     const intervalId = setInterval(async () => {
       if (!publicKey) return;
       try {
@@ -116,7 +116,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           }
         }
         latestSignatures.current = fetchedLatestSignatures;
-        retryDelay = 15000;
+        retryDelay = 9000;
       } catch (error) {
         console.error("RPC Error:", error);
         retryDelay *= 2;
